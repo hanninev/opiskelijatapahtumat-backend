@@ -11,15 +11,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 const appId = process.env.APP_ID
 const appSecret = process.env.APP_SECRET
+let lista = []
 
-
-app.get('/events', async (req, res) => {
+beforeAll = async () => {
   const auth = await axios.get("https://graph.facebook.com/oauth/access_token?client_id=" + appId + "&client_secret=" + appSecret + "&grant_type=client_credentials")
   const token = auth.data.access_token
 
   const allPages = await organizers.map(async p => {
-    // console.log(p)
-    const requestCurrentPage = await axios.get('https://graph.facebook.com/v2.11/' + p.fbpage_id + '?fields=events.limit(10){start_time,name,owner,place}&access_token=' + token)
+    const requestCurrentPage = await axios.get('https://graph.facebook.com/v2.11/' + p.fbpage_id + '?fields=events.limit(30){start_time,name,owner,place}&access_token=' + token)
     if (requestCurrentPage.data.events !== undefined) {
     return requestCurrentPage.data.events.data
     } else {
@@ -27,12 +26,52 @@ app.get('/events', async (req, res) => {
     }
   })
   const unMerged = await Promise.all(allPages) 
-  const merged = [].concat.apply([], unMerged) // tän voisi tehdä frontissa?
-  res.json(merged)
+  const merged = [].concat.apply([], unMerged)
+  lista = merged
+ console.log('data updated')
+}
+
+beforeAll()
+
+app.get('/load', async (req, res) => {
+  beforeAll()
+})
+
+containsSomeSearchAttribute = (string, searchAttributes) => {
+  return searchAttributes.some(s => string.indexOf(s) > 0)
+}
+
+app.get('/events', async (req, res) => {
+  const ehdot = req.query.date.split(",")
+  console.log(ehdot)
+  const palautettava = lista.filter(p => ehdot.some(e => e === p.start_time.substring(0, 10)))
+  res.json(palautettava)
 })
 
 app.get('/organizers', async (req, res) => {
   res.json(organizers)
+})
+
+app.get('/organizer_types', async (req, res) => {
+  const organizerTypes = organizers.map(o => {
+    if (o.type !== undefined) {
+      return o.type
+    }
+  })
+
+  const withoutDuplicates = Array.from(new Set(organizerTypes))
+  res.json(withoutDuplicates)
+})
+
+app.get('/locations', async (req, res) => {
+  const locations = lista.map(e => {
+    if (e.place !== undefined) {
+      return e.place.name
+    }
+  })
+  const withoutUndefined = locations.filter(p => p !== undefined)
+  const withoutDuplicates = Array.from(new Set(withoutUndefined))
+  res.json(withoutDuplicates)
 })
 
 const logger = (request, response, next) => {
