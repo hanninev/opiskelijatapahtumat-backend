@@ -20,15 +20,18 @@ beforeAll = async () => {
   const allPages = await organizers.map(async p => {
     const requestCurrentPage = await axios.get('https://graph.facebook.com/v2.11/' + p.fbpage_id + '?fields=events.limit(30){start_time,name,owner,place}&access_token=' + token)
     if (requestCurrentPage.data.events !== undefined) {
-    return requestCurrentPage.data.events.data
+      const currentPage = await requestCurrentPage.data.events.data.map(i => {
+        return { ...i, organizer: p }
+      })
+      return currentPage
     } else {
       return []
     }
   })
-  const unMerged = await Promise.all(allPages) 
+  const unMerged = await Promise.all(allPages)
   const merged = [].concat.apply([], unMerged)
   lista = merged
- console.log('data updated')
+  console.log('data updated')
 }
 
 beforeAll()
@@ -42,6 +45,9 @@ containsSomeSearchAttribute = (string, searchAttributes) => {
 }
 
 app.get('/events', async (req, res) => {
+  if (req.query.date === undefined) {
+    return res.json(lista)
+  }
   const ehdot = req.query.date.split(",")
   console.log(ehdot)
   const palautettava = lista.filter(p => ehdot.some(e => e === p.start_time.substring(0, 10)))
@@ -69,8 +75,18 @@ app.get('/locations', async (req, res) => {
       return e.place.name
     }
   })
+ 
   const withoutUndefined = locations.filter(p => p !== undefined)
-  const withoutDuplicates = Array.from(new Set(withoutUndefined))
+  const sorted = withoutUndefined.slice().sort()
+
+  const results = []
+  for (let i = 0; i < sorted.length - 4; i++) {
+      if (sorted[i + 4] == sorted[i]) {
+          results.push(sorted[i]);
+      }
+  }
+  
+  const withoutDuplicates = Array.from(new Set(results))
   res.json(withoutDuplicates)
 })
 
@@ -97,7 +113,7 @@ let organizers = [
     "gategory": "",
     "type": "Osakunnat"
   },
-   {
+  {
     "name": "Savolainen Osakunta (SavO)",
     "fbpage_id": 160061217353643,
     "gategory": "",
@@ -541,7 +557,7 @@ let organizers = [
     "fbpage_id": 158797267493102,
     "gategory": "Valtiotieteellinen tiedekunta",
     "type": "Tiedekunta- ja ainejärjestöt"
-  }, 
+  },
   {
     "name": "Stydi ry",
     "fbpage_id": 539795719389314,
