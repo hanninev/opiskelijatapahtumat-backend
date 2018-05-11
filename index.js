@@ -1,13 +1,27 @@
 const axios = require('axios')
+const http = require('http')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const mongoose = require('mongoose')
+const eventTypesRouter = require('./controllers/eventTypes')
+const config = require('./utils/config')
 
 app.use(cors())
+app.use('/admin', eventTypesRouter)
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
+
+mongoose
+    .connect(config.mongoUrl)
+    .then(() => {
+        console.log('connected to database', config.mongoUrl)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 
 const appId = process.env.APP_ID
 const appSecret = process.env.APP_SECRET
@@ -16,7 +30,7 @@ let lista = [{
   "name": "Hämäläis-Osakunta goes suursitsit!",
   "description": "Hämis lähtee Senaatintorin Suursitseille! Kevät ja kevään suurimmat sitsit odottavat! Tarjolla on mitä mahtavimmat sitsit, hyvää seuraa ja maittavaa ruokaa. Juhlat alkavat torstaina 24.5.2018 siinä 16.30/17 aikaan Senaatintorilla. Aikataulut tarkentuvat vielä lähempänä tapahtumaa. Pukukoodina kesäinen asu, osakunta-/järjestönauha ja ylioppilaslakki. Pukeutumisen on kuitenkin hyvä olla säänmukaista. Hintaa suursitseille kertyy 22 euroa. Maksutiedot ilmoitetaan osallistujille myöhemmin aikataulun kera. Suursitsit Senaatintorilla järjestetään osakuntalaitoksen 375-juhlavuoden sekä Helsingin yliopiston ylioppilaskunnan 150-juhlavuoden kunniaksi 24.5.2018. Paikalle on tulossa jopa 1900 opiskelijaa ja yliopistoyhteisön jäsentä. Nimensä mukaisesti kyse on koko Senaatintorin kattavista suurista sitseistä, joiden ideana on tuoda ylioppilaiden juhlaperinnettä näkyväksi pois ylioppilastaloilta ja avata sitä myös kaupunkilaisille. Hintaan sisältyy maukkaan ruoan ja juoman lisäksi myös suursitsien haalarimerkki. Ilmoittautuminen avautuu keskiviikkona 28.3.2018 klo 12 osoitteessa http://hamis.nettilomake.fi/form/5915!",
   "start_time": "2018-05-24T20:00:00-0400",
-  "organizer":   {
+  "organizer": {
     "name": "Hämäläis-Osakunta (HO)",
     "fbpage_id": 420221918176511,
     "gategory": "",
@@ -24,97 +38,97 @@ let lista = [{
   },
   "place": {
     "name": "Hämäläis-osakunta"
-  }    
+  }
 },
 {
-"id": "2005956139621381",
-"name": "Kevätsitsit",
-"description": "Wappu ei lopu!",
-"start_time": "2018-05-10T20:00:00-0400",
-"organizer":     {
-  "name": "Moodi ",
-  "fbpage_id": 195948560421434,
-  "gategory": "Valtiotieteellinen tiedekunta",
-  "type": "Tiedekunta- ja ainejärjestöt"
-},
-"place": {
-  "name": "Alina-sali"
-}    
-},
-{
-"id": "2005956139621381",
-"name": "Ompeluilta",
-"description": "Jee ompelemaan",
-"start_time": "2018-05-11T20:00:00-0400",
-"organizer": {
-"name": "Viikin taloustieteilijät",
-"fbpage_id": 172909282731720,
-"gategory": "Maatalous-metsätieteellinen tiedekunta",
-"type": "Tiedekunta- ja ainejärjestöt"
-},
-"place": {
-"name": "C-grundi"
-}    
+  "id": "2005956139621381",
+  "name": "Kevätsitsit",
+  "description": "Wappu ei lopu!",
+  "start_time": "2018-05-10T20:00:00-0400",
+  "organizer": {
+    "name": "Moodi ",
+    "fbpage_id": 195948560421434,
+    "gategory": "Valtiotieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
+  "place": {
+    "name": "Alina-sali"
+  }
 },
 {
-"id": "2005956139621381",
-"name": "Tekiksen kesäbileet",
-"description": "Wappu ei lopu!",
-"start_time": "2018-05-12T20:00:00-0400",
-"organizer": {
-"name": "TKO-äly ",
-"fbpage_id": 175686629125957,
-"gategory": "Matemaattis-luonnontieteellinen tiedekunta",
-"type": "Tiedekunta- ja ainejärjestöt"
-},
-"place": {
-"name": "Klusteri"
-}    
-},
-{
-"id": "2005956139621381",
-"name": "Beer pong -turnaus",
-"description": "Wappu ei lopu!",
-"start_time": "2018-05-10T20:00:00-0400",
-"organizer": {
-"name": "TKO-äly ",
-"fbpage_id": 175686629125957,
-"gategory": "Matemaattis-luonnontieteellinen tiedekunta",
-"type": "Tiedekunta- ja ainejärjestöt"
-},
-"place": {
-"name": "Klusteri"
-}    
+  "id": "2005956139621381",
+  "name": "Ompeluilta",
+  "description": "Jee ompelemaan",
+  "start_time": "2018-05-11T20:00:00-0400",
+  "organizer": {
+    "name": "Viikin taloustieteilijät",
+    "fbpage_id": 172909282731720,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
+  "place": {
+    "name": "C-grundi"
+  }
 },
 {
-"id": "2005956139621381",
-"name": "Kesäsitsit",
-"description": "Tervetuloa sitsaamaan",
-"start_time": "2018-05-08T20:00:00-0400",
-"organizer":   {
-"name": "Hämäläis-Osakunta (HO)",
-"fbpage_id": 420221918176511,
-"gategory": "",
-"type": "Osakunnat"
-},
-"place": {
-"name": "Hämäläis-osakunta"
-}    
+  "id": "2005956139621381",
+  "name": "Tekiksen kesäbileet",
+  "description": "Wappu ei lopu!",
+  "start_time": "2018-05-12T20:00:00-0400",
+  "organizer": {
+    "name": "TKO-äly ",
+    "fbpage_id": 175686629125957,
+    "gategory": "Matemaattis-luonnontieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
+  "place": {
+    "name": "Klusteri"
+  }
 },
 {
-"id": "2005956139621381",
-"name": "Limeksen appro",
-"description": "Wappu ei lopu!",
-"start_time": "2018-05-13T20:00:00-0400",
-"organizer": {
-"name": "Limeksen appro",
-"fbpage_id": 338222509565589,
-"gategory": "",
-"type": "Muut"
+  "id": "2005956139621381",
+  "name": "Beer pong -turnaus",
+  "description": "Wappu ei lopu!",
+  "start_time": "2018-05-10T20:00:00-0400",
+  "organizer": {
+    "name": "TKO-äly ",
+    "fbpage_id": 175686629125957,
+    "gategory": "Matemaattis-luonnontieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
+  "place": {
+    "name": "Klusteri"
+  }
 },
-"place": {
-"name": "Apollo"
-}    
+{
+  "id": "2005956139621381",
+  "name": "Kesäsitsit",
+  "description": "Tervetuloa sitsaamaan",
+  "start_time": "2018-05-08T20:00:00-0400",
+  "organizer": {
+    "name": "Hämäläis-Osakunta (HO)",
+    "fbpage_id": 420221918176511,
+    "gategory": "",
+    "type": "Osakunnat"
+  },
+  "place": {
+    "name": "Hämäläis-osakunta"
+  }
+},
+{
+  "id": "2005956139621381",
+  "name": "Limeksen appro",
+  "description": "Wappu ei lopu!",
+  "start_time": "2018-05-13T20:00:00-0400",
+  "organizer": {
+    "name": "Limeksen appro",
+    "fbpage_id": 338222509565589,
+    "gategory": "",
+    "type": "Muut"
+  },
+  "place": {
+    "name": "Apollo"
+  }
 }
 ]
 
@@ -206,18 +220,18 @@ app.get('/locations', async (req, res) => {
       return e.place.name
     }
   })
-/*  const withoutUndefined = locations.filter(p => p !== undefined)
-  const sorted = withoutUndefined.slice().sort()
-
-  const results = []
-  for (let i = 0; i < sorted.length - 4; i++) {
-    if (sorted[i + 4] == sorted[i]) {
-      results.push(sorted[i]);
-    }
-  } */
+  /*  const withoutUndefined = locations.filter(p => p !== undefined)
+    const sorted = withoutUndefined.slice().sort()
+  
+    const results = []
+    for (let i = 0; i < sorted.length - 4; i++) {
+      if (sorted[i + 4] == sorted[i]) {
+        results.push(sorted[i]);
+      }
+    } */
   const results = locations
   const withoutDuplicates = Array.from(new Set(results))
-  res.json(withoutDuplicates) 
+  res.json(withoutDuplicates)
 })
 
 const logger = (request, response, next) => {
@@ -746,334 +760,344 @@ let organizers = [
     "fbpage_id": 539795719389314,
     "gategory": "Valtiotieteellinen tiedekunta",
     "type": "Tiedekunta- ja ainejärjestöt"
-  }, 
+  },
   {
-   "name": "Valtio-opin opiskelijat",
-   "fbpage_id": 216926405084423,
-   "gategory": "Valtiotieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Valtio-opin opiskelijat",
+    "fbpage_id": 216926405084423,
+    "gategory": "Valtiotieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Maatalous-metsäylioppilaiden liitto ry",
-   "fbpage_id": 194812483886222,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Maatalous-metsäylioppilaiden liitto ry",
+    "fbpage_id": 194812483886222,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Agro-Forst ",
-   "fbpage_id": 1007074909375158,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Agro-Forst ",
+    "fbpage_id": 1007074909375158,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Lipidi ",
-   "fbpage_id": 201194693239830,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Lipidi ",
+    "fbpage_id": 201194693239830,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Markkina-Agraarit ",
-   "fbpage_id": 1716388508581217,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Markkina-Agraarit ",
+    "fbpage_id": 1716388508581217,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Metsäylioppilaat ",
-   "fbpage_id": 879039012184432,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Metsäylioppilaat ",
+    "fbpage_id": 879039012184432,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Oikos ",
-   "fbpage_id": 1606482893009937,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Oikos ",
+    "fbpage_id": 1606482893009937,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Sampsa ",
-   "fbpage_id": 168676149859463,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Sampsa ",
+    "fbpage_id": 168676149859463,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Viikin taloustieteilijät",
-   "fbpage_id": 172909282731720,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Viikin taloustieteilijät",
+    "fbpage_id": 172909282731720,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Viri Lactis ",
-   "fbpage_id": 244264448975220,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Viri Lactis ",
+    "fbpage_id": 244264448975220,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Voluntas ",
-   "fbpage_id": 451383025010533,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Voluntas ",
+    "fbpage_id": 451383025010533,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Vuorovaikeutus ",
-   "fbpage_id": 273982539384210,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Vuorovaikeutus ",
+    "fbpage_id": 273982539384210,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Ympäristötieteiden opiskelijat MYY ry",
-   "fbpage_id": 211224148903297,
-   "gategory": "Maatalous-metsätieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Ympäristötieteiden opiskelijat MYY ry",
+    "fbpage_id": 211224148903297,
+    "gategory": "Maatalous-metsätieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Eläinlääketieteen kandidaattiyhdistys",
-   "fbpage_id": 585535938191031,
-   "gategory": "Eläinlääketieteellinen tiedekunta",
-   "type": "Tiedekunta- ja ainejärjestöt"
-   }, 
+    "name": "Eläinlääketieteen kandidaattiyhdistys",
+    "fbpage_id": 585535938191031,
+    "gategory": "Eläinlääketieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
   {
-   "name": "Akateeminen Laulu",
-   "fbpage_id": 143613869008718,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Akateeminen Laulu",
+    "fbpage_id": 143613869008718,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Akateeminen Puhallinorkesteri",
-   "fbpage_id": 496731520384987,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Akateeminen Puhallinorkesteri",
+    "fbpage_id": 496731520384987,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Eteläsuomalaisen Osakunnan Laulajat (EOL)",
-   "fbpage_id": 165281176829702,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Eteläsuomalaisen Osakunnan Laulajat (EOL)",
+    "fbpage_id": 165281176829702,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "HOS Big Band",
-   "fbpage_id": 191386474295861,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "HOS Big Band",
+    "fbpage_id": 191386474295861,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Humanistispeksi",
-   "fbpage_id": 167294359974425,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Humanistispeksi",
+    "fbpage_id": 167294359974425,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Hämäläis-Osakunnan Laulajat (HOL)",
-   "fbpage_id": 106721329367913,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Hämäläis-Osakunnan Laulajat (HOL)",
+    "fbpage_id": 106721329367913,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Kuokkavieraat",
-   "fbpage_id": 178319182224947,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Kuokkavieraat",
+    "fbpage_id": 178319182224947,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Käyttäytymistieteellinen speksi",
-   "fbpage_id": 172147169557481,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Käyttäytymistieteellinen speksi",
+    "fbpage_id": 172147169557481,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Metsoforte",
-   "fbpage_id": 124840604258807,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Metsoforte",
+    "fbpage_id": 124840604258807,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Pohjalaisten Osakuntien Laulajat (POL)",
-   "fbpage_id": 118462768332674,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Pohjalaisten Osakuntien Laulajat (POL)",
+    "fbpage_id": 118462768332674,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Satakuntalaisen Osakunnan kuoro",
-   "fbpage_id": 899031746802259,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Satakuntalaisen Osakunnan kuoro",
+    "fbpage_id": 899031746802259,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Savolaisen Osakunnan Laulajat (SOL)",
-   "fbpage_id": 116524421746804,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Savolaisen Osakunnan Laulajat (SOL)",
+    "fbpage_id": 116524421746804,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Savolaisen Osakunnan Soitannollinen Seura SOSSu",
-   "fbpage_id": 124009637621234,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Savolaisen Osakunnan Soitannollinen Seura SOSSu",
+    "fbpage_id": 124009637621234,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Studentteatern",
-   "fbpage_id": 200534829958369,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Studentteatern",
+    "fbpage_id": 200534829958369,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Thespians Anonymous",
-   "fbpage_id": 171094276239413,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Thespians Anonymous",
+    "fbpage_id": 171094276239413,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Valkotakit ry",
-   "fbpage_id": 677466372406931,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Valkotakit ry",
+    "fbpage_id": 677466372406931,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Valtsikan speksi",
-   "fbpage_id": 348046728547289,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Valtsikan speksi",
+    "fbpage_id": 348046728547289,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Wiipurilaisen Osakunnan Laulajat (WiOL)",
-   "fbpage_id": 276567229105522,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Wiipurilaisen Osakunnan Laulajat (WiOL)",
+    "fbpage_id": 276567229105522,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Ylioppilaskunnan Soittajat (YS)",
-   "fbpage_id": 292715337424953,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Ylioppilaskunnan Soittajat (YS)",
+    "fbpage_id": 292715337424953,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Ylioppilasteatteri",
-   "fbpage_id": 246585515355815,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Ylioppilasteatteri",
+    "fbpage_id": 246585515355815,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "Äänenkannattajat",
-   "fbpage_id": 278191812512170,
-   "gategory": "",
-   "type": "Kuorot, orkesterit ja teatterit"
-   }, 
+    "name": "Äänenkannattajat",
+    "fbpage_id": 278191812512170,
+    "gategory": "",
+    "type": "Kuorot, orkesterit ja teatterit"
+  },
   {
-   "name": "HYY:n Elokuvaryhmä ry.",
-   "fbpage_id": 182778095087709,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "HYY:n Elokuvaryhmä ry.",
+    "fbpage_id": 182778095087709,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Helsingin yliopiston teknokulttuurin ystävät",
-   "fbpage_id": 293833960630962,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Helsingin yliopiston teknokulttuurin ystävät",
+    "fbpage_id": 293833960630962,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Helmut",
-   "fbpage_id": 345900505526959,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Helmut",
+    "fbpage_id": 345900505526959,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Alter Ego",
-   "fbpage_id": 203953793068781,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Alter Ego",
+    "fbpage_id": 203953793068781,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Salamurhaajien kilta",
-   "fbpage_id": 979516865401187,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Salamurhaajien kilta",
+    "fbpage_id": 979516865401187,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "YliGo",
-   "fbpage_id": '467096029977319',
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "YliGo",
+    "fbpage_id": '467096029977319',
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Helsingin yliopiston pelaajat",
-   "fbpage_id": 494945383860648,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Helsingin yliopiston pelaajat",
+    "fbpage_id": 494945383860648,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Hyvät Martat ry",
-   "fbpage_id": 349163785196402,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Hyvät Martat ry",
+    "fbpage_id": 349163785196402,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Åländska Studentföreningen",
-   "fbpage_id": 120729191338080,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Åländska Studentföreningen",
+    "fbpage_id": 120729191338080,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Helsingin yliopiston partiolaiset",
-   "fbpage_id": 785288214908610,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Helsingin yliopiston partiolaiset",
+    "fbpage_id": 785288214908610,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Mentor-klubi",
-   "fbpage_id": 114705138607428,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Mentor-klubi",
+    "fbpage_id": 114705138607428,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Helsingin Akateemiset Ulkoiluttajat",
-   "fbpage_id": 124266360975343,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Helsingin Akateemiset Ulkoiluttajat",
+    "fbpage_id": 124266360975343,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   // {
- //  "name": "Akateeminen viiniseura",
- //  "fbpage_id": 315841701803647,
- //  "gategory": "",
- //  "type": "Harrastejärjestöt"
- //  }, 
+  //  "name": "Akateeminen viiniseura",
+  //  "fbpage_id": 315841701803647,
+  //  "gategory": "",
+  //  "type": "Harrastejärjestöt"
+  //  }, 
   {
-   "name": "Akateeminen Jaloviinakerho",
-   "fbpage_id": 1424134604491966,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Akateeminen Jaloviinakerho",
+    "fbpage_id": 1424134604491966,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Lapselliset",
-   "fbpage_id": 124737230929447,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
+    "name": "Lapselliset",
+    "fbpage_id": 124737230929447,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
   {
-   "name": "Debating Society",
-   "fbpage_id": 103125323135815,
-   "gategory": "",
-   "type": "Harrastejärjestöt"
-   }, 
-   {
+    "name": "Debating Society",
+    "fbpage_id": 103125323135815,
+    "gategory": "",
+    "type": "Harrastejärjestöt"
+  },
+  {
     "name": "Helsingin yliopiston ylioppilaskunta",
     "fbpage_id": 275038856985,
     "gategory": "",
     "type": "Muut"
-    }, 
-    {
-     "name": "Limeksen appro",
-     "fbpage_id": 338222509565589,
-     "gategory": "",
-     "type": "Muut"
-     }, 
-     {
-      "name": "Bileinsinöörit",
-      "fbpage_id": 1472110096334118,
-      "gategory": "",
-      "type": "Muut"
-      }
+  },
+  {
+    "name": "Limeksen appro",
+    "fbpage_id": 338222509565589,
+    "gategory": "",
+    "type": "Muut"
+  },
+  {
+    "name": "Bileinsinöörit",
+    "fbpage_id": 1472110096334118,
+    "gategory": "",
+    "type": "Muut"
+  }
 ]
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
+const server = http.createServer(app)
+
+const PORT = config.port
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+server.on('close', () => {
+  mongoose.connection.close()
+})
+
+module.exports = {
+  app, server
+}
