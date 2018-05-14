@@ -31,4 +31,37 @@ console.log(body)
     }
 })
 
+eventTypeRouter.delete('/:id', async (request, response) => {
+    try {
+        const eventType = await EventType.findById(request.params.id)
+        await EventType.findByIdAndRemove(request.params.id)
+        response.status(204).end()
+    } catch (exception) {
+        console.log(exception)
+        response.status(400).send({ error: 'malformatted id' })
+    }
+})
+
+eventTypeRouter.put('/:id', async (request, response) => {
+    const body = request.body
+
+    const eventType = {
+        text: body.text,
+        searchAttributes: body.searchAttributes,
+        dontShowIfTitleContains: body.dontShowIfTitleContains,
+        dontShowEvents: body.dontShowEvents
+    }
+
+    EventType
+        .findByIdAndUpdate(request.params.id, eventType, { new: true })
+        .then(updatedEventType => {
+            response.json(Blog.format(updatedEventType))
+        })
+
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' })
+        })
+})
+
 module.exports = eventTypeRouter
