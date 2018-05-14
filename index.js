@@ -13,6 +13,7 @@ const Organizer = require('./models/organizer')
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(express.static('build'))
 app.use('/admin', eventTypesRouter)
 app.use('/organizers', organizersRouter)
 
