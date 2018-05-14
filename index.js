@@ -165,9 +165,9 @@ let lista = [{
   console.log('data updated') 
   console.log(lista)
 }
-*/
 
-// beforeAll()
+
+beforeAll() */
 
 app.get('/load', async (req, res) => {
   beforeAll()
@@ -221,7 +221,7 @@ app.get('/locations', async (req, res) => {
       return e.place.name
     }
   })
-  /*  const withoutUndefined = locations.filter(p => p !== undefined)
+  /*const withoutUndefined = locations.filter(p => p !== undefined)
     const sorted = withoutUndefined.slice().sort()
   
     const results = []
