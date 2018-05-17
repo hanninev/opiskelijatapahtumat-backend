@@ -135,6 +135,36 @@ let lista = [{
   "place": {
     "name": "Apollo"
   }
+},
+{
+  "id": "2005956139621381",
+  "name": "Fuksisitsit",
+  "description": "Nyt sitsataan!",
+  "start_time": "2018-05-08T20:00:00-0400",
+  "organizer": {
+    "name": "Historicus ",
+    "fbpage_id": "127541777311945",
+    "gategory": "Humanistinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
+  "place": {
+    "name": "Alina-sali"
+  }
+},
+{
+  "id": "2005956139621381",
+  "name": "Hallituksen kokous",
+  "description": "Sääntömääräinen kokous",
+  "start_time": "2018-05-09T20:00:00-0400",
+  "organizer": {
+    "name": "Matrix ry ",
+    "fbpage_id": "258975124205023",
+    "gategory": "Matemaattis-luonnontieteellinen tiedekunta",
+    "type": "Tiedekunta- ja ainejärjestöt"
+  },
+  "place": {
+    "name": "Alina-sali"
+  }
 }
 ]
 
