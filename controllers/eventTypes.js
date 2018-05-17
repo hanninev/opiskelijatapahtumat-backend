@@ -55,7 +55,7 @@ eventTypeRouter.put('/:id', async (request, response) => {
     EventType
         .findByIdAndUpdate(request.params.id, eventType, { new: true })
         .then(updatedEventType => {
-            response.json(Blog.format(updatedEventType))
+            response.json(EventType.format(updatedEventType))
         })
 
         .catch(error => {
