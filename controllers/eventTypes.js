@@ -7,7 +7,7 @@ eventTypeRouter.get('/', async (request, response) => {
     response.json(eventTypes.map(EventType.format))
 })
 
-/*  eventTypeRouter.post('/', async (request, response) => {
+  eventTypeRouter.post('/', async (request, response) => {
     const body = request.body
 console.log(body)
     try {
@@ -62,6 +62,6 @@ eventTypeRouter.put('/:id', async (request, response) => {
             console.log(error)
             response.status(400).send({ error: 'malformatted id' })
         })
-})*/
+})
 
 module.exports = eventTypeRouter

@@ -7,16 +7,18 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const eventTypesRouter = require('./controllers/eventTypes')
 const organizersRouter = require('./controllers/organizers')
+const eventsRouter = require('./controllers/events')
 const config = require('./utils/config')
 const EventType = require('./models/eventType')
 const Organizer = require('./models/organizer')
+const Event = require('./models/event')
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.static('build'))
 app.use('/admin', eventTypesRouter)
 app.use('/organizers', organizersRouter)
-
+app.use('/events', eventsRouter)
 
 mongoose
     .connect(config.mongoUrl)
@@ -31,142 +33,6 @@ mongoose
 
 const appId = process.env.APP_ID
 const appSecret = process.env.APP_SECRET
-let lista = [{
-  "id": "2005956139621381",
-  "name": "Hämäläis-Osakunta goes suursitsit!",
-  "description": "Hämis lähtee Senaatintorin Suursitseille! Kevät ja kevään suurimmat sitsit odottavat! Tarjolla on mitä mahtavimmat sitsit, hyvää seuraa ja maittavaa ruokaa. Juhlat alkavat torstaina 24.5.2018 siinä 16.30/17 aikaan Senaatintorilla. Aikataulut tarkentuvat vielä lähempänä tapahtumaa. Pukukoodina kesäinen asu, osakunta-/järjestönauha ja ylioppilaslakki. Pukeutumisen on kuitenkin hyvä olla säänmukaista. Hintaa suursitseille kertyy 22 euroa. Maksutiedot ilmoitetaan osallistujille myöhemmin aikataulun kera. Suursitsit Senaatintorilla järjestetään osakuntalaitoksen 375-juhlavuoden sekä Helsingin yliopiston ylioppilaskunnan 150-juhlavuoden kunniaksi 24.5.2018. Paikalle on tulossa jopa 1900 opiskelijaa ja yliopistoyhteisön jäsentä. Nimensä mukaisesti kyse on koko Senaatintorin kattavista suurista sitseistä, joiden ideana on tuoda ylioppilaiden juhlaperinnettä näkyväksi pois ylioppilastaloilta ja avata sitä myös kaupunkilaisille. Hintaan sisältyy maukkaan ruoan ja juoman lisäksi myös suursitsien haalarimerkki. Ilmoittautuminen avautuu keskiviikkona 28.3.2018 klo 12 osoitteessa http://hamis.nettilomake.fi/form/5915!",
-  "start_time": "2018-05-24T20:00:00-0400",
-  "organizer": {
-    "name": "Hämäläis-Osakunta (HO)",
-    "fbpage_id": 420221918176511,
-    "gategory": "",
-    "type": "Osakunnat"
-  },
-  "place": {
-    "name": "Hämäläis-osakunta"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Kevätsitsit",
-  "description": "Wappu ei lopu!",
-  "start_time": "2018-05-10T20:00:00-0400",
-  "organizer": {
-    "name": "Moodi ",
-    "fbpage_id": 195948560421434,
-    "gategory": "Valtiotieteellinen tiedekunta",
-    "type": "Tiedekunta- ja ainejärjestöt"
-  },
-  "place": {
-    "name": "Alina-sali"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Ompeluilta",
-  "description": "Jee ompelemaan",
-  "start_time": "2018-05-11T20:00:00-0400",
-  "organizer": {
-    "name": "Viikin taloustieteilijät",
-    "fbpage_id": 172909282731720,
-    "gategory": "Maatalous-metsätieteellinen tiedekunta",
-    "type": "Tiedekunta- ja ainejärjestöt"
-  },
-  "place": {
-    "name": "C-grundi"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Tekiksen kesäbileet",
-  "description": "Wappu ei lopu!",
-  "start_time": "2018-05-12T20:00:00-0400",
-  "organizer": {
-    "name": "TKO-äly ",
-    "fbpage_id": 175686629125957,
-    "gategory": "Matemaattis-luonnontieteellinen tiedekunta",
-    "type": "Tiedekunta- ja ainejärjestöt"
-  },
-  "place": {
-    "name": "Klusteri"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Beer pong -turnaus",
-  "description": "Wappu ei lopu!",
-  "start_time": "2018-05-10T20:00:00-0400",
-  "organizer": {
-    "name": "TKO-äly ",
-    "fbpage_id": 175686629125957,
-    "gategory": "Matemaattis-luonnontieteellinen tiedekunta",
-    "type": "Tiedekunta- ja ainejärjestöt"
-  },
-  "place": {
-    "name": "Klusteri"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Kesäsitsit",
-  "description": "Tervetuloa sitsaamaan",
-  "start_time": "2018-05-08T20:00:00-0400",
-  "organizer": {
-    "name": "Hämäläis-Osakunta (HO)",
-    "fbpage_id": 420221918176511,
-    "gategory": "",
-    "type": "Osakunnat"
-  },
-  "place": {
-    "name": "Hämäläis-osakunta"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Limeksen appro",
-  "description": "Wappu ei lopu!",
-  "start_time": "2018-05-13T20:00:00-0400",
-  "organizer": {
-    "name": "Limeksen appro",
-    "fbpage_id": 338222509565589,
-    "gategory": "",
-    "type": "Muut"
-  },
-  "place": {
-    "name": "Apollo"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Fuksisitsit",
-  "description": "Nyt sitsataan!",
-  "start_time": "2018-05-08T20:00:00-0400",
-  "organizer": {
-    "name": "Historicus ",
-    "fbpage_id": "127541777311945",
-    "gategory": "Humanistinen tiedekunta",
-    "type": "Tiedekunta- ja ainejärjestöt"
-  },
-  "place": {
-    "name": "Alina-sali"
-  }
-},
-{
-  "id": "2005956139621381",
-  "name": "Hallituksen kokous",
-  "description": "Sääntömääräinen kokous",
-  "start_time": "2018-05-09T20:00:00-0400",
-  "organizer": {
-    "name": "Matrix ry ",
-    "fbpage_id": "258975124205023",
-    "gategory": "Matemaattis-luonnontieteellinen tiedekunta",
-    "type": "Tiedekunta- ja ainejärjestöt"
-  },
-  "place": {
-    "name": "Alina-sali"
-  }
-}
-]
 
 // Alunperin tämä haki tapahtumat Facebookista, kunnes kyseiset kyselyt estettiin
 
@@ -206,16 +72,6 @@ app.get('/load', async (req, res) => {
 containsSomeSearchAttribute = (string, searchAttributes) => {
   return searchAttributes.some(s => string.indexOf(s) > 0)
 }
-
-app.get('/events', async (req, res) => {
-  if (req.query.date === undefined) {
-    return res.json(lista)
-  }
-  const ehdot = req.query.date.split(",")
-  console.log(ehdot)
-  const palautettava = lista.filter(p => ehdot.some(e => e === p.start_time.substring(0, 10)))
-  res.json(palautettava)
-})
 
 app.get('/organizer_types', async (req, res) => {
   const organizers = await Organizer
