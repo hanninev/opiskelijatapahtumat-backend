@@ -15,7 +15,7 @@ const Event = require('./models/event')
 
 app.use(cors())
 app.use(bodyParser.json())
-app.use(express.static('build'))
+// app.use(express.static('build'))
 app.use('/admin', eventTypesRouter)
 app.use('/organizers', organizersRouter)
 app.use('/events', eventsRouter)
@@ -99,26 +99,6 @@ app.get('/event_types', async (req, res) => {
     }
   })
   res.json(sorted)
-})
-
-app.get('/locations', async (req, res) => {
-  const locations = lista.map(e => {
-    if (e.place !== undefined) {
-      return e.place.name
-    }
-  })
-  /*const withoutUndefined = locations.filter(p => p !== undefined)
-    const sorted = withoutUndefined.slice().sort()
-  
-    const results = []
-    for (let i = 0; i < sorted.length - 4; i++) {
-      if (sorted[i + 4] == sorted[i]) {
-        results.push(sorted[i]);
-      }
-    } */
-  const results = locations
-  const withoutDuplicates = Array.from(new Set(results))
-  res.json(withoutDuplicates)
 })
 
 const logger = (request, response, next) => {
