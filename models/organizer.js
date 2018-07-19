@@ -3,16 +3,19 @@ const mongoose = require('mongoose')
 const organizerSchema = new mongoose.Schema({
     name: String,
     fbpage_id: String,
-    gategory: String,
-    type: String
+    organizer_type: String,
+    faculty: String,
+    web_site: String
 })
 
 organizerSchema.statics.format = (organizer) => {
     return {
+        id: organizer._id,
         name: organizer.name,
         fbpage_id: organizer.fbpage_id,
-        gategory: organizer.gategory,
-        type: organizer.type
+        organizer_type: organizer.organizer_type,
+        faculty: organizer.faculty,
+        web_site: organizer.web_site
     }
 }
 

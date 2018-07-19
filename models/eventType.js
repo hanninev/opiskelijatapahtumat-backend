@@ -1,19 +1,13 @@
 const mongoose = require('mongoose')
 
 const eventTypeSchema = new mongoose.Schema({
-    text: String,
-    searchAttributes: [],
-    dontShowIfTitleContains: [],
-    dontShowEvents: []
+    name: String
 })
 
 eventTypeSchema.statics.format = (eventType) => {
     return {
         id: eventType.id,
-        text: eventType.text,
-        searchAttributes: eventType.searchAttributes,
-        dontShowIfTitleContains: eventType.dontShowIfTitleContains,
-        dontShowEvents: eventType.dontShowEvents
+        name: eventType.name
     }
 }
 

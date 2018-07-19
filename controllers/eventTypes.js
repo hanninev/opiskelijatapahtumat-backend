@@ -9,21 +9,17 @@ eventTypeRouter.get('/', async (request, response) => {
 
 eventTypeRouter.post('/', async (request, response) => {
     const body = request.body
-    console.log(body)
+
     try {
-        if (body.text === undefined) {
-            response.status(400).send({ error: 'text missing' })
+        if (body.name === undefined) {
+            response.status(400).send({ error: 'name missing' })
         }
 
         const eventType = new EventType({
-            text: body.text,
-            searchAttributes: body.searchAttributes,
-            dontShowIfTitleContains: body.dontShowIfTitleContains,
-            dontShowEvents: body.dontShowEvents
+            name: body.name,
         })
 
         const savedEventType = await eventType.save()
-
         response.json(EventType.format(savedEventType))
     } catch (exception) {
         console.log(exception)
@@ -46,10 +42,7 @@ eventTypeRouter.put('/:id', async (request, response) => {
     const body = request.body
 
     const eventType = {
-        text: body.text,
-        searchAttributes: body.searchAttributes,
-        dontShowIfTitleContains: body.dontShowIfTitleContains,
-        dontShowEvents: body.dontShowEvents
+        name: body.name
     }
 
     EventType
