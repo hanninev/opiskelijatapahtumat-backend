@@ -4,13 +4,13 @@ const Location = require('../models/location')
 locationRouter.get('/', async (request, response) => {
     const locations = await Location
         .find({})
-    response.json(locations.map(Location.format))
-})
+        response.json(Event.format(locations))
+    })
 
 locationRouter.get('/:id', async (request, response) => {
     const locations = await Location
         .findById(request.params.id)
-    response.json(locations.map(Location.format))
+        response.json(Event.format(locations))
 })
 
 locationRouter.post('/', async (request, response) => {

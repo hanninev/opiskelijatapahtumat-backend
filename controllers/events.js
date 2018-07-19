@@ -8,7 +8,16 @@ eventRouter.get('/', async (request, response) => {
   //  .populate('organizers')
   //  .populate('location')
 
-  response.json(events.map(Event.format))
+  if (request.query.date === undefined) {
+    response.json(Event.format(events))
+  // response.json(events.map(Event.format))
+
+  }
+
+  const ehdot = request.query.date.split(",")
+  const palautettava = events.filter(p => ehdot.some(e => e === p.start_time.substring(0, 10)))
+
+  response.json(palautettava.map(Event.format))
 })
 
 eventRouter.get('/:id', async (request, response) => {
