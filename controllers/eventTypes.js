@@ -4,7 +4,7 @@ const EventType = require('../models/eventType')
 eventTypeRouter.get('/', async (request, response) => {
     const eventTypes = await EventType
         .find({})
-    response.json(Event.format(eventTypes))
+    response.json(EventType.format(eventTypes))
 })
 
 eventTypeRouter.post('/', async (request, response) => {
