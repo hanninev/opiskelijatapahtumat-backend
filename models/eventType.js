@@ -11,6 +11,6 @@ eventTypeSchema.statics.format = (eventType) => {
     }
 }
 
-const EventType = mongoose.model('EventType', eventTypeSchema)
+const EventType = mongoose.model('eventType', eventTypeSchema)
 
 module.exports = EventType

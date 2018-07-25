@@ -4,8 +4,8 @@ const eventSchema = new mongoose.Schema({
     name: String,
     start_time: { type: Date },
     end_time: { type: Date },
-    eventTypes: { type: mongoose.Schema.Types.ObjectId, ref: 'eventTypes' },
-    organizers: { type: mongoose.Schema.Types.ObjectId, ref: 'organizers' },
+    eventTypes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'eventType' }],
+    organizers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'organizer' }],
     location: { type: mongoose.Schema.Types.ObjectId, ref: 'location' },
     locationInfo: String,
     description: String,
@@ -33,6 +33,6 @@ eventSchema.statics.format = (event) => {
     }
 }
 
-const Event = mongoose.model('Event', eventSchema)
+const Event = mongoose.model('event', eventSchema)
 
 module.exports = Event

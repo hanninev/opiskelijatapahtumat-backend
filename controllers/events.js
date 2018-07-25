@@ -4,9 +4,9 @@ const Event = require('../models/event')
 eventRouter.get('/', async (request, response) => {
   const events = await Event
     .find({})
-  //  .populate('eventTypes')
-  //  .populate('organizers')
-  //  .populate('location')
+    .populate('eventType')
+    .populate('organizer')
+    .populate('location')
 
   if (request.query.date === undefined) {
     response.json(events.map(Event.format))
@@ -21,9 +21,9 @@ eventRouter.get('/', async (request, response) => {
 eventRouter.get('/:id', async (request, response) => {
   const events = await Event
     .findById(request.params.id)
-  //  .populate('eventType')
-  //  .populate('organizers')
-  //  .populate('location')
+    .populate('eventType')
+    .populate('organizer')
+    .populate('location')
 
   response.json(events.map(Event.format))
 })

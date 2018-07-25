@@ -19,6 +19,6 @@ organizerSchema.statics.format = (organizer) => {
     }
 }
 
-const Organizer = mongoose.model('Organizer', organizerSchema)
+const Organizer = mongoose.model('organizer', organizerSchema)
 
 module.exports = Organizer
