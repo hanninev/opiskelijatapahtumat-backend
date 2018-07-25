@@ -9,7 +9,7 @@ eventRouter.get('/', async (request, response) => {
   //  .populate('location')
 
   if (request.query.date === undefined) {
-    response.json(Event.format(events))
+    response.json(events.map(Events.format))
   }
 
   const ehdot = request.query.date.split(",")
@@ -25,7 +25,7 @@ eventRouter.get('/:id', async (request, response) => {
   //  .populate('organizers')
   //  .populate('location')
 
-  response.json(Event.format(events))
+  response.json(events.map(Event.format))
 })
 
 eventRouter.post('/', async (request, response) => {
