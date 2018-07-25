@@ -9,7 +9,7 @@ eventRouter.get('/', async (request, response) => {
   //  .populate('location')
 
   if (request.query.date === undefined) {
-    response.json(events.map(Events.format))
+    response.json(events.map(Event.format))
   }
 
   const ehdot = request.query.date.split(",")
