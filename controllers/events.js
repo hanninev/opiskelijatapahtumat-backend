@@ -10,8 +10,6 @@ eventRouter.get('/', async (request, response) => {
 
   if (request.query.date === undefined) {
     response.json(Event.format(events))
-  // response.json(events.map(Event.format))
-
   }
 
   const ehdot = request.query.date.split(",")
