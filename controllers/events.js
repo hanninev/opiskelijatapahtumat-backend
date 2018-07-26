@@ -1,3 +1,4 @@
+const moment = require('moment');
 const eventRouter = require('express').Router()
 const Event = require('../models/event')
 
@@ -8,12 +9,14 @@ eventRouter.get('/', async (request, response) => {
     .populate('organizer')
     .populate('location')
 
-  if (request.query.date === undefined) {
+  if (request.query.start === undefined) {
     response.json(events.map(Event.format))
   }
 
-  const ehdot = request.query.date.split(",")
-  const palautettava = events.filter(p => ehdot.some(e => e === p.start_time.substring(0, 10)))
+  const palautettava = events.filter(p => {
+    const date = moment(p.start_time).subtract(1, 'days').format().substring(0, 10)
+    return moment(date).isBetween(request.query.start, request.query.end, null, '[]')
+  })
 
   response.json(palautettava.map(Event.format))
 })
