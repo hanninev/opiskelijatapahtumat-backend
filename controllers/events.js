@@ -38,7 +38,7 @@ eventRouter.post('/', async (request, response) => {
     if (body.eventTypes === undefined) {
       response.status(400).send({ error: 'event types missing' })
     }
-    if (body.location === undefined) {
+    if (body.locations === undefined) {
       response.status(400).send({ error: 'location missing' })
     }
     if (body.eventTypes === undefined) {
@@ -52,7 +52,7 @@ eventRouter.post('/', async (request, response) => {
       end_time: body.end_time,
       eventTypes: body.eventTypes,
       organizers: body.organizers,
-      location: body.location,
+      locations: body.locations,
       locationInfo: body.locationInfo,
       description: body.description,
       fb_link: body.fb_link,
@@ -91,7 +91,7 @@ eventRouter.put('/:id', async (request, response) => {
     end_time: body.end_time,
     eventTypes: body.eventTypes,
     organizers: body.organizers,
-    location: body.location,
+    locations: body.locations,
     locationInfo: body.locationInfo,
     description: body.description,
     fb_link: body.fb_link,
