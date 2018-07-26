@@ -23,7 +23,7 @@ eventSchema.statics.format = (event) => {
         end_time: event.end_time,
         eventTypes: event.eventTypes,
         organizers: event.organizers,
-        locations: event.location,
+        locations: event.locations,
         locationInfo: event.locationInfo,
         description: event.description,
         fb_link: event.fb_link,
