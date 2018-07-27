@@ -48,13 +48,13 @@ eventRouter.post('/', async (request, response) => {
     if (body.end_time === undefined || body.end_time === '') {
       response.status(400).send({ error: 'end date missing' })
     }
-    if (body.eventTypes === undefined || body.eventTypes === '' || body.eventTypes.length === 0) {
+    if (body.eventTypes === undefined || body.eventTypes.length === 0) {
       response.status(400).send({ error: 'event type missing' })
     }
-    if (body.locations === undefined || body.locations === '' || body.locations.length === 0) {
+    if (body.locations === undefined || body.locations.length === 0) {
       response.status(400).send({ error: 'location missing' })
     }
-    if (body.organizers === undefined || body.organizers === '' || body.organizers.length === 0) {
+    if (body.organizers === undefined || body.organizers.length === 0) {
       response.status(400).send({ error: 'organizer missing' })
     }
 
