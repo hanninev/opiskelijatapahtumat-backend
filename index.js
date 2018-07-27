@@ -10,6 +10,7 @@ const organizersRouter = require('./controllers/organizers')
 const eventsRouter = require('./controllers/events')
 const usersRouter = require('./controllers/users')
 const locationsRouter = require('./controllers/locations')
+const loginRouter = require('./controllers/login')
 const config = require('./utils/config')
 
 app.use(cors())
@@ -19,6 +20,7 @@ app.use('/api/events', eventsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/event_types', eventTypesRouter)
 app.use('/api/locations', locationsRouter)
+app.use('/api/login', loginRouter)
 
 
 mongoose
