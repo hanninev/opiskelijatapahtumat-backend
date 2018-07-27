@@ -11,7 +11,7 @@ eventTypeRouter.post('/', async (request, response) => {
     const body = request.body
 
     try {
-        if (body.name === undefined) {
+        if (body.name === undefined || body.name === '') {
             response.status(400).send({ error: 'name missing' })
         }
 

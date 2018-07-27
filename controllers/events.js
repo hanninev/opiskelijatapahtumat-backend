@@ -35,16 +35,26 @@ eventRouter.post('/', async (request, response) => {
   const body = request.body
   console.log(body)
   try {
-    if (body.name === undefined) {
+
+    if (body.name === undefined || body.name === '') {
       response.status(400).send({ error: 'name missing' })
     }
-    if (body.eventTypes === undefined) {
-      response.status(400).send({ error: 'event types missing' })
+    if (body.description === undefined || body.description === '') {
+      response.status(400).send({ error: 'description missing' })
     }
-    if (body.locations === undefined) {
+    if (body.startDate === undefined || body.startDate === '') {
+      response.status(400).send({ error: 'start date missing' })
+    }
+    if (body.endDate === undefined || body.endDate === '') {
+      response.status(400).send({ error: 'end date missing' })
+    }
+    if (body.eventTypes === undefined || body.eventTypes === '') {
+      response.status(400).send({ error: 'event type missing' })
+    }
+    if (body.locations === undefined || body.locations === '') {
       response.status(400).send({ error: 'location missing' })
     }
-    if (body.eventTypes === undefined) {
+    if (body.organizers === undefined || body.organizers === '') {
       response.status(400).send({ error: 'organizer missing' })
     }
 

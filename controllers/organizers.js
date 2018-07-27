@@ -17,8 +17,11 @@ organizerRouter.post('/', async (request, response) => {
     const body = request.body
 
     try {
-        if (body.name === undefined) {
+        if (body.name === undefined || body.name === '') {
             response.status(400).send({ error: 'name missing' })
+        }
+        if (body.organizer_type === undefined || body.organizer_type === '') {
+            response.status(400).send({ error: 'organizer type missing' })
         }
 
         const organizer = new Organizer({

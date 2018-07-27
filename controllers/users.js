@@ -27,6 +27,21 @@ usersRouter.get('/:id', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
     try {
         const body = request.body
+
+        if (body.username === undefined || body.username === '') {
+            response.status(400).send({ error: 'username missing' })
+        }
+        if (body.firstName === undefined || body.firstName === '') {
+            response.status(400).send({ error: 'firstName missing' })
+        }
+        if (body.surname === undefined || body.surname === '') {
+            response.status(400).send({ error: 'surname missing' })
+        }
+        if (body.email === undefined || body.email === '') {
+            response.status(400).send({ error: 'email missing' })
+        }
+
+
         const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
         const user = new User({
