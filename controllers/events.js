@@ -42,10 +42,10 @@ eventRouter.post('/', async (request, response) => {
     if (body.description === undefined || body.description === '') {
       response.status(400).send({ error: 'description missing' })
     }
-    if (body.startDate === undefined || body.startDate === '') {
+    if (body.start_time === undefined || body.start_time === '') {
       response.status(400).send({ error: 'start date missing' })
     }
-    if (body.endDate === undefined || body.endDate === '') {
+    if (body.end_time === undefined || body.end_time === '') {
       response.status(400).send({ error: 'end date missing' })
     }
     if (body.eventTypes === undefined || body.eventTypes === '') {
