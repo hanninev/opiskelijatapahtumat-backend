@@ -15,7 +15,7 @@ const auth = (request) => {
 
 eventRouter.get('/', async (request, response) => {
   const events = await Event
-    .find({})
+    .find({ accepted: true })
     .populate('eventTypes')
     .populate('organizers')
     .populate('locations')
@@ -30,6 +30,16 @@ eventRouter.get('/', async (request, response) => {
   })
 
   response.json(palautettava.map(Event.format))
+})
+
+eventRouter.get('/unaccepted', async (request, response) => {
+  const events = await Event
+    .find({ accepted: false })
+    .populate('eventTypes')
+    .populate('organizers')
+    .populate('locations')
+
+    response.json(events.map(Event.format))
 })
 
 eventRouter.get('/:id', async (request, response) => {

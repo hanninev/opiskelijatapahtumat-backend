@@ -3,25 +3,31 @@ const Location = require('../models/location')
 const jwt = require('jsonwebtoken')
 
 const auth = (request) => {
-  const token = request.get('authorization')
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+    const token = request.get('authorization')
+    const decodedToken = jwt.verify(token, process.env.SECRET)
 
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-  return token
+    if (!token || !decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    return token
 }
 
 locationRouter.get('/', async (request, response) => {
     const locations = await Location
-        .find({})
-        response.json(locations.map(Location.format))
-    })
+        .find({ accepted: true })
+    response.json(locations.map(Location.format))
+})
+
+locationRouter.get('/unaccepted', async (request, response) => {
+    const locations = await Location
+        .find({ accepted: false })
+    response.json(locations.map(Location.format))
+})
 
 locationRouter.get('/:id', async (request, response) => {
     const locations = await Location
         .findById(request.params.id)
-        response.json(locations.map(Location.format))
+    response.json(locations.map(Location.format))
 })
 
 locationRouter.post('/', async (request, response) => {

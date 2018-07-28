@@ -14,7 +14,13 @@ const auth = (request) => {
 
 organizerRouter.get('/', async (request, response) => {
     const organizers = await Organizer
-        .find({})
+        .find({ accepted: true })
+    response.json(organizers.map(Organizer.format))
+})
+
+organizerRouter.get('/unaccepted', async (request, response) => {
+    const organizers = await Organizer
+        .find({ accepted: false })
     response.json(organizers.map(Organizer.format))
 })
 

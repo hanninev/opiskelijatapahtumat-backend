@@ -14,7 +14,13 @@ const auth = (request) => {
 
 eventTypeRouter.get('/', async (request, response) => {
     const eventTypes = await EventType
-        .find({})
+        .find({ accepted: true })
+        response.json(eventTypes.map(EventType.format))
+})
+
+eventTypeRouter.get('/unaccepted', async (request, response) => {
+    const eventTypes = await EventType
+        .find({ accepted: false })
         response.json(eventTypes.map(EventType.format))
 })
 
