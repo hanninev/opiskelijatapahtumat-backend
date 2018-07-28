@@ -33,8 +33,15 @@ eventRouter.get('/:id', async (request, response) => {
 })
 
 eventRouter.post('/logged', async (request, response) => {
+  const token = request.get('authorization')
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
   const body = request.body
   console.log(body)
+  
   try {
 
     if (body.name === undefined || body.name === '') {
@@ -86,13 +93,6 @@ eventRouter.post('/logged', async (request, response) => {
 })
 
 eventRouter.post('/', async (request, response) => {
-  const token = getTokenFrom(request)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
   const body = request.body
   console.log(body)
   try {
