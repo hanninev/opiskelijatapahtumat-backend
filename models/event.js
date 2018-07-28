@@ -12,7 +12,8 @@ const eventSchema = new mongoose.Schema({
     fb_link: String,
     creationTime: { type: Date },
     lastModified: { type: Date },
-    createdUser: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
+    createdUser: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+    accepted: { type: Boolean }
 })
 
 eventSchema.statics.format = (event) => {
@@ -29,7 +30,8 @@ eventSchema.statics.format = (event) => {
         fb_link: event.fb_link,
         creationTime: event.creationTime,
         lastModified: event.lastModified,
-        createdUser: event.createdUser
+        createdUser: event.createdUser,
+        accepted: event.accepted
     }
 }
 

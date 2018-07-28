@@ -5,7 +5,8 @@ const organizerSchema = new mongoose.Schema({
     fbpage_id: String,
     organizer_type: String,
     faculty: String,
-    web_site: String
+    web_site: String,
+    accepted: { type: Boolean }
 })
 
 organizerSchema.statics.format = (organizer) => {
@@ -15,7 +16,8 @@ organizerSchema.statics.format = (organizer) => {
         fbpage_id: organizer.fbpage_id,
         organizer_type: organizer.organizer_type,
         faculty: organizer.faculty,
-        web_site: organizer.web_site
+        web_site: organizer.web_site,
+        accepted: organizer.accepted
     }
 }
 
