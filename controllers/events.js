@@ -3,6 +3,16 @@ const eventRouter = require('express').Router()
 const Event = require('../models/event')
 const jwt = require('jsonwebtoken')
 
+const auth = (request) => {
+  const token = request.get('authorization')
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  return token
+}
+
 eventRouter.get('/', async (request, response) => {
   const events = await Event
     .find({})
@@ -33,15 +43,8 @@ eventRouter.get('/:id', async (request, response) => {
 })
 
 eventRouter.post('/logged', async (request, response) => {
-  const token = request.get('authorization')
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+  this.auth(request)
 
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-  const body = request.body
-  console.log(body)
-  
   try {
 
     if (body.name === undefined || body.name === '') {
@@ -146,6 +149,8 @@ eventRouter.post('/', async (request, response) => {
 })
 
 eventRouter.delete('/:id', async (request, response) => {
+  this.auth(request)
+
   try {
     const event = await Event.findById(request.params.id)
     await Event.findByIdAndRemove(request.params.id)
@@ -157,6 +162,8 @@ eventRouter.delete('/:id', async (request, response) => {
 })
 
 eventRouter.put('/:id', async (request, response) => {
+  this.auth(request)
+
   const body = request.body
 
   const event = {
