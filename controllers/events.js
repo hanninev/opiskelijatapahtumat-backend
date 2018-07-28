@@ -208,7 +208,7 @@ eventRouter.put('/:id', async (request, response) => {
 })
 
 eventRouter.put('/accept/:id', async (request, response) => {
-//  auth(request)
+  auth(request)
 
   try {
     const updatedEvent = await Event.findByIdAndUpdate(request.params.id, { accepted: true }, { new: true })
