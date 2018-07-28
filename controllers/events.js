@@ -39,7 +39,7 @@ eventRouter.get('/unaccepted', async (request, response) => {
     .populate('organizers')
     .populate('locations')
 
-    response.json(events.map(Event.format))
+  response.json(events.map(Event.format))
 })
 
 eventRouter.get('/:id', async (request, response) => {
@@ -208,18 +208,16 @@ eventRouter.put('/:id', async (request, response) => {
 })
 
 eventRouter.put('/accept/:id', async (request, response) => {
-  auth(request)
+//  auth(request)
 
-  Event
-    .findByIdAndUpdate(request.params.id, { accepted: true }, { new: true })
-    .then(updatedEvent => {
-      response.json(Event.format(updatedEvent))
-    })
+  try {
+    const updatedEvent = await Event.findByIdAndUpdate(request.params.id, { accepted: true }, { new: true })
 
-    .catch(error => {
-      console.log(error)
-      response.status(400).send({ error: 'malformatted id' })
-    })
+    response.json(Event.format(updatedEvent))
+  } catch (e) {
+    console.log(error)
+    response.status(400).send({ error: 'malformatted id' })
+  }
 })
 
 
