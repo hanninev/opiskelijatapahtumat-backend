@@ -44,7 +44,9 @@ eventRouter.get('/:id', async (request, response) => {
 
 eventRouter.post('/logged', async (request, response) => {
   auth(request)
-
+  
+  const body = request.body
+  console.log(body)
   try {
 
     if (body.name === undefined || body.name === '') {
