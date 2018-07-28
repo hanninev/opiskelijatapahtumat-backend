@@ -78,7 +78,7 @@ eventTypeRouter.delete('/:id', async (request, response) => {
 eventTypeRouter.put('/:id', async (request, response) => {
     auth(request)
 
-    const body = request.body,
+    const body = request.body
 
     const eventType = {
         name: body.name,
