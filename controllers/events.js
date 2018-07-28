@@ -44,7 +44,7 @@ eventRouter.get('/:id', async (request, response) => {
 
 eventRouter.post('/logged', async (request, response) => {
   auth(request)
-  
+
   const body = request.body
   console.log(body)
   try {
@@ -181,7 +181,8 @@ eventRouter.put('/:id', async (request, response) => {
     fb_link: body.fb_link,
     creationTime: body.creationTime,
     lastModified: Date.now(),
-    createdUser: body.createdUser
+    createdUser: body.createdUser,
+    accepted: body.accepted
   }
 
   Event

@@ -1,5 +1,16 @@
 const locationRouter = require('express').Router()
 const Location = require('../models/location')
+const jwt = require('jsonwebtoken')
+
+const auth = (request) => {
+  const token = request.get('authorization')
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  return token
+}
 
 locationRouter.get('/', async (request, response) => {
     const locations = await Location
@@ -26,7 +37,33 @@ locationRouter.post('/', async (request, response) => {
 
         const location = new Location({
             name: body.name,
-            address: body.address
+            address: body.address,
+            accepted: false
+        })
+
+        const savedLocation = await location.save()
+        response.json(Location.format(savedLocation))
+    } catch (exception) {
+        console.log(exception)
+        response.status(500).json({ error: 'something went wrong...' })
+    }
+})
+
+locationRouter.post('/logged', async (request, response) => {
+    const body = request.body
+
+    try {
+        if (body.name === undefined || body.name === '') {
+            response.status(400).send({ error: 'name missing' })
+        }
+        if (body.address === undefined || body.address === '') {
+            response.status(400).send({ error: 'name missing' })
+        }
+
+        const location = new Location({
+            name: body.name,
+            address: body.address,
+            accepted: true
         })
 
         const savedLocation = await location.save()
@@ -38,6 +75,8 @@ locationRouter.post('/', async (request, response) => {
 })
 
 locationRouter.delete('/:id', async (request, response) => {
+    auth(request)
+
     try {
         const location = await Location.findById(request.params.id)
         await Location.findByIdAndRemove(request.params.id)
@@ -49,11 +88,14 @@ locationRouter.delete('/:id', async (request, response) => {
 })
 
 locationRouter.put('/:id', async (request, response) => {
+    auth(request)
+
     const body = request.body
 
     const location = {
         name: body.name,
-        address: body.address
+        address: body.address,
+        accepted: body.accepted
     }
 
     Location

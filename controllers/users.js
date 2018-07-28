@@ -4,7 +4,7 @@ const User = require('../models/user')
 
 const saltRounds = 9
 
-usersRouter.get('/', async (request, response) => {
+/* usersRouter.get('/', async (request, response) => {
     const users = await User.find({})
     response.json(users.map(User.format))
 })
@@ -22,7 +22,7 @@ usersRouter.get('/:id', async (request, response) => {
         console.log(err)
         response.status(404).send({ error: 'malformatted id' })
     }
-})
+}) */
 
 usersRouter.post('/', async (request, response) => {
     try {
@@ -51,7 +51,7 @@ usersRouter.post('/', async (request, response) => {
             email: body.email,
             passwordHash: passwordHash,
             organizers: body.organizers,
-            admin: body.admin
+            admin: false
         })
 
         const savedUser = await user.save()
@@ -62,7 +62,7 @@ usersRouter.post('/', async (request, response) => {
     }
 })
 
-usersRouter.delete('/:id', async (request, response) => {
+/* usersRouter.delete('/:id', async (request, response) => {
     try {
         const user = await User.findById(request.params.id)
         await User.remove(user)
@@ -103,5 +103,5 @@ usersRouter.put('/:id', async (request, response) => {
         console.log('malformatted id')
     }
 })
-
+*/
 module.exports = usersRouter
