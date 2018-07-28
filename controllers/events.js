@@ -207,4 +207,20 @@ eventRouter.put('/:id', async (request, response) => {
     })
 })
 
+eventRouter.put('/accept/:id', async (request, response) => {
+  auth(request)
+
+  Event
+    .findByIdAndUpdate(request.params.id, { accepted: true }, { new: true })
+    .then(updatedEvent => {
+      response.json(Event.format(updatedEvent))
+    })
+
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({ error: 'malformatted id' })
+    })
+})
+
+
 module.exports = eventRouter

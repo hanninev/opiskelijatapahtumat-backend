@@ -127,4 +127,19 @@ organizerRouter.put('/:id', async (request, response) => {
         })
 })
 
+organizerRouter.put('/accept/:id', async (request, response) => {
+    auth(request)
+
+    organizerType
+        .findByIdAndUpdate(request.params.id, { accepted: true }, { new: true })
+        .then(updatedOrganizer => {
+            response.json(Organizer.format(updatedOrganizer))
+        })
+
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' })
+        })
+})
+
 module.exports = organizerRouter

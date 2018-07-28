@@ -116,4 +116,19 @@ locationRouter.put('/:id', async (request, response) => {
         })
 })
 
+locationRouter.put('/accept/:id', async (request, response) => {
+    auth(request)
+
+    Location
+        .findByIdAndUpdate(request.params.id, { accepted: true }, { new: true })
+        .then(updatedLocation => {
+            response.json(Location.format(updatedLocation))
+        })
+
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' })
+        })
+})
+
 module.exports = locationRouter
