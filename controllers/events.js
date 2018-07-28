@@ -43,7 +43,7 @@ eventRouter.get('/:id', async (request, response) => {
 })
 
 eventRouter.post('/logged', async (request, response) => {
-  this.auth(request)
+  auth(request)
 
   try {
 
@@ -149,7 +149,7 @@ eventRouter.post('/', async (request, response) => {
 })
 
 eventRouter.delete('/:id', async (request, response) => {
-  this.auth(request)
+  auth(request)
 
   try {
     const event = await Event.findById(request.params.id)
@@ -162,7 +162,7 @@ eventRouter.delete('/:id', async (request, response) => {
 })
 
 eventRouter.put('/:id', async (request, response) => {
-  this.auth(request)
+  auth(request)
 
   const body = request.body
 
