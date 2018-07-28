@@ -106,7 +106,7 @@ organizerRouter.put('/:id', async (request, response) => {
 
     const body = request.body
 
-    const organizerType = {
+    const organizer = {
         name: body.name,
         fbpage_id: body.fbpage_id,
         organizer_type: body.organizer_type,
@@ -115,7 +115,7 @@ organizerRouter.put('/:id', async (request, response) => {
         accepted: body.accepted
     }
 
-    organizerType
+    Organizer
         .findByIdAndUpdate(request.params.id, organizer, { new: true })
         .then(updatedOrganizer => {
             response.json(Organizer.format(updatedOrganizer))
@@ -130,7 +130,7 @@ organizerRouter.put('/:id', async (request, response) => {
 organizerRouter.put('/accept/:id', async (request, response) => {
     auth(request)
 
-    organizerType
+    Organizer
         .findByIdAndUpdate(request.params.id, { accepted: true }, { new: true })
         .then(updatedOrganizer => {
             response.json(Organizer.format(updatedOrganizer))
