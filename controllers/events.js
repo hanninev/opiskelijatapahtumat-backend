@@ -25,7 +25,7 @@ eventRouter.get('/', async (request, response) => {
   }
 
   const palautettava = events.filter(p => {
-    const date = moment(p.start_time).subtract(1, 'days').format().substring(0, 10)
+    const date = moment(p.start_time).format().substring(0, 10)
     return moment(date).isBetween(request.query.start, request.query.end, null, '[]')
   })
 
