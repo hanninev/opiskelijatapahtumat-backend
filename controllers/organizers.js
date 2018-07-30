@@ -18,6 +18,16 @@ organizerRouter.get('/', async (request, response) => {
     response.json(organizers.map(Organizer.format))
 })
 
+organizerRouter.get('/by_value/', async (request, response) => {
+    const organizers = await Organizer
+        .find({
+            name: request.query.name,
+            organizer_type: request.query.organizer_type,
+            faculty: request.query.faculty
+        })
+    response.json(organizers.map(Organizer.format))
+})
+
 organizerRouter.get('/unaccepted', async (request, response) => {
     const organizers = await Organizer
         .find({ accepted: false })

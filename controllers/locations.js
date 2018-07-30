@@ -18,6 +18,15 @@ locationRouter.get('/', async (request, response) => {
     response.json(locations.map(Location.format))
 })
 
+locationRouter.get('/by_value/', async (request, response) => {
+    const locations = await Location
+        .find({
+            name: request.query.name,
+            address: request.query.address
+        })
+    response.json(locations.map(Location.format))
+})
+
 locationRouter.get('/unaccepted', async (request, response) => {
     const locations = await Location
         .find({ accepted: false })

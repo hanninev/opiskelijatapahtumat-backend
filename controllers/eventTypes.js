@@ -18,6 +18,12 @@ eventTypeRouter.get('/', async (request, response) => {
         response.json(eventTypes.map(EventType.format))
 })
 
+eventTypeRouter.get('/by_value/', async (request, response) => {
+    const eventTypes = await EventType
+        .find({ name: request.query.name })
+        response.json(eventTypes.map(EventType.format))
+})
+
 eventTypeRouter.get('/unaccepted', async (request, response) => {
     const eventTypes = await EventType
         .find({ accepted: false })
